@@ -1,4 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios, { all } from "axios";
+
+const API = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com/posts/",
+});
 
 // get posts from API
 export const fetchPost = createAsyncThunk(
@@ -14,7 +19,6 @@ export const fetchPost = createAsyncThunk(
     }
   }
 );
-
 
 // update post
 export const updatePost = createAsyncThunk(
@@ -85,6 +89,56 @@ const postsSlice = createSlice({
         state.posts = action.payload;
       })
       .addCase(fetchPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // update operation / update post
+      .addCase(updatePost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.posts.findIndex(
+          (post) => post.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.posts[index] = action.payload;
+        }
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deletePost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.loading = false;
+        const filterPost = state.posts.filter(
+          (post) => post.id != action.payload.id
+        );
+        state.posts = filterPost;
+
+        // const index = state.posts.findIndex((post) => post.id === action.payload.id)
+        // state.posts.splice(index, 1);
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(createPost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.loading = false;
+        const post = action.payload;
+        // Avoid duplicate ID injection
+        const alreadyExists = state.posts.some((p) => p.id === post.id);
+        if (!alreadyExists) {
+          state.posts.unshift(post);
+        }
+      })
+      .addCase(createPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
