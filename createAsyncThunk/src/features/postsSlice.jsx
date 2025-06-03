@@ -23,6 +23,22 @@ const postsSlice = createSlice({
     error: null,
   },
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // read operation / get posts
+      .addCase(fetchPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase(fetchPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
 
 export default postsSlice.reducer;
