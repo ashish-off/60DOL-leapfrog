@@ -1,5 +1,5 @@
 import React from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, type FieldErrors } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 type FormValues = {
@@ -31,28 +31,50 @@ const YoutubeForm = () => {
     },
   });
 
-  const { register, control, handleSubmit, formState } = form;
-  // register is a function that registers the input field with the form
-  // control is used to control the form state and validation
-  // handleSubmit is a function that handles the form submission
-  // formState contains the state of the form, like errors, isValid, isDirty, etc.
-  const { errors } = formState;
+  const { register, control, handleSubmit, formState, watch, getValues, setValue } = form;
+
+  const { errors, touchedFields, dirtyFields, isDirty, isValid } = formState;
   // error have types as requierd, pattern, minLength .. etc
+  console.log({touchedFields, dirtyFields, isDirty,isValid });
+  
 
   // useFieldArray is used to manage an array of fields in the form
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, } = useFieldArray({
     name: "phNumbers",
     control,
   });
+
+  // watch is used to watch the value of a field (takes the field name as an argument or an array of field names)
+  // const watchForm = watch(); // watch all fields
+  const watchUsername = watch(["username", "email"]);
 
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted", data);
   };
 
+  const handlegetValues = () => {
+    console.log("for values :", getValues());
+    // console.log("for values :", getValues("socials")); only get the socials object
+  }
+
+  const handleSetValues = () => {
+    setValue("username", "ashishisa", {
+      shouldDirty : true,
+      shouldTouch: true,
+      shouldValidate: true,
+    })
+  }
+
+  const onError = (errors: FieldErrors<FormValues>) => {
+    console.log("Form errors :", errors);
+  };
+
   return (
     <div>
       <h1>An Youtube Form</h1>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <h2>Watch: {watchUsername[0]} and {watchUsername[1]}</h2>
+
+      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="form-control">
           <label htmlFor="username">Username</label>
 
@@ -184,17 +206,19 @@ const YoutubeForm = () => {
                 message: "Age is required",
               },
               valueAsNumber: true, // note: use valueAsDate for date inputs
-              validate : {
+              validate: {
                 notPositive: (value) => {
                   return value > 0 || "Age must be a positive number";
-                }
-              } // to convert the input value to a number
+                },
+              }, // to convert the input value to a number
             })}
           />
           <p className="error">{errors.age?.message}</p>
         </div>
 
-        <button>Submit</button>
+        <button disabled = {!isDirty || !isValid} >Submit</button>
+        <button type="button" onClick={handlegetValues}>Get values</button>
+        <button type="button" onClick={handleSetValues}>set value</button>
       </form>
       <DevTool control={control} />
     </div>
@@ -203,7 +227,10 @@ const YoutubeForm = () => {
 
 export default YoutubeForm;
 
-// how to react hook form
+// react hook form Notes
+
+//  DevTools (Optional)
+// Use <DevTool control={control} /> for debugging (from @hookform/devtools)
 
 // 1. Install and Import
 // Install with npm install react-hook-form
@@ -211,6 +238,10 @@ export default YoutubeForm;
 
 // 2. Initialize the Form
 // Call const { register, handleSubmit, formState, control } = useForm()
+  // register is a function that registers the input field with the form
+  // control is used to control the form state and validation
+  // handleSubmit is a function that handles the form submission
+  // formState contains the state of the form, like errors, isValid, isDirty, etc.
 
 // 3.Register Inputs
 // Use {...register("fieldName", validationRules)} on your input fields
@@ -229,5 +260,25 @@ export default YoutubeForm;
 // 7. Custom Validation
 // Use the validate property in register for custom logic
 
-// 8. DevTools (Optional)
-// Use <DevTool control={control} /> for debugging (from @hookform/devtools)
+// 8. Dynamic Fields
+// Use useFieldArray for managing arrays of fields (appending, removing fields)
+
+// 9. working on number and date inputs
+//  Use valueAsNumber for number inputs and valueAsDate for date inputs in register
+
+// 10. watch 
+// Use watch to monitor field values in real-time (e.g., const watchedValue = watch("fieldName")) renders the component whenever the watched field changes
+
+// 11. getValues
+// Use getValues() to retrieve current form values at any time which doesnot renders the component.  (takes the field name as an argument or an array of field names)
+
+// 12. setValue
+// Use setValue("fieldName", value, options) to programmatically set field values. it does not triggers like mannual input but you can pass options like shouldDirty, shouldTouch, shouldValidate to trigger the form state updates
+
+// 13. touched and dirty 
+//  touched fields are the fields that have been interacted with, and dirty fields are the fields that have been changed from their initial value.
+
+// 14. disabled 
+// pass the disabled as the secondary arguement to register function to disable the input field
+// submit button can be disabled based on form state like isDirty, isValid, etc.
+
