@@ -1,0 +1,6 @@
+f = open("demo.txt", "a+")
+f.write("hellow everyone\n")
+f.write("I am learning file handling\n")
+f.seek(0)
+print(f.read())
+f.close()
