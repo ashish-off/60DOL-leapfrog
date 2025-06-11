@@ -3,13 +3,15 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import YoutubeForm from './Components/YoutubeForm'
+import YupForm from './Components/YupForm'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <YoutubeForm />
+    {/* <YoutubeForm /> */}
+    <YupForm />
     </>
   )
 }
