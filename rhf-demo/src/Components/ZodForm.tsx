@@ -10,15 +10,21 @@ interface FormValues {
 }
 
 const ZodForm = () => {
-  // define yup schema
-
+  
+  // define Zod schema and using refine to add custom validation
   const schema = z.object({
     name: z.string().nonempty("Name is required"),
     email: z
       .string()
       .email("Invalid email address")
-      .nonempty("Email is required"),
-    address: z.string().nonempty("Address is required"),
+      .nonempty("Email is required")
+      // custom validation for email
+      .refine((formField) => !formField.includes("admin") , {
+        message: "Email cannot contain 'admin'",
+      }),
+    address: z.string().nonempty("Address is required").refine((formField) => formField.length >= 10 , {
+      message: "Address must be at least 10 characters long",
+    }),
   });
 
   const { formState, register, control, handleSubmit } = useForm<FormValues>({
