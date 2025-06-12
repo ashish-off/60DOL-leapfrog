@@ -40,7 +40,7 @@ const ZodForm = () => {
     <div>
       <h1>Zod resolver form </h1>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="form-control">
           <label htmlFor="name">Name</label>
           <input type="text" id="name" {...register("name")} />
