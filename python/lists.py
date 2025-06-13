@@ -39,3 +39,7 @@ print("after removing kiwi : ", list)
 marks.pop(2)
 print("after popping index 2 : ", marks)
 
+l1 = [x for x in range(11) if x%2 == 0] 
+print(l1)
+l2 = [x for x in range(11) if x%2 != 0]
+print(l2)
