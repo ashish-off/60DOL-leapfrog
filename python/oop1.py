@@ -39,3 +39,30 @@ print(s2.getMark())
 # static method can be called using class name or object name
 s2.displaySchool()
 Student.displaySchool()
+
+# assignment: bank system
+
+class Account : 
+  def __init__(self, name, balance):
+    self.name = name
+    self.balance = balance
+    
+  def deposit(self , amount) :
+    self.balance += amount
+    print(f"Deposited {amount}. New balance is {self.balance}.")
+    
+  def withdraw(self, amount) :
+    if amount < self.balance :
+      self.balance -= amount
+      print(f"Withdrew {amount}. New balance is {self.balance}.")
+    else : 
+      print("insufficient balance")
+
+  def displayAccount(self) :
+    print(f"Account holder: {self.name}, \nBalance: {self.balance}")
+  
+acc1 = Account("ashish", 10000)
+acc1.deposit(100)
+acc1.withdraw(1000)
+acc1.displayAccount()
+    
