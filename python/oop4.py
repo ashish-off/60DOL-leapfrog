@@ -20,6 +20,7 @@ print(Person.count, Person.name)  # 0 amonymous
 
 p1 = Person("Ashi")
 print(p1.name, Person.count)
+print(p1.get_count(), p1.is_adult(20))  # 1 True
 print(Person.count, Person.name)  # 1 anonymous 
 
 p2 = Person("Bobby")
