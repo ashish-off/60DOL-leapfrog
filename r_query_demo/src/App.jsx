@@ -5,6 +5,8 @@ import PostDetailsRQ from "./components/PostDetailsRQ";
 import PostsTraditional from "./components/PostTraditional";
 import PostsRQ from "./components/PostsRQ";
 import { Route, Routes, Link } from "react-router-dom";
+import InfiniteQuery from "./components/infiniteQuery";
+import InfiniteAutoQuery from "./components/InfiniteAutoQuery";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
         <Route path="/rq-posts" element={<PostsRQ />} />
         <Route path="/rq-posts/:postId" element={<PostDetailsRQ />} />
         <Route path="/paginated-fruits" element={<PaginatedQueries />} />
+        <Route path="/infinite-fruits" element={<InfiniteQuery />} />
+        <Route path="/autoinfinite-fruits" element={<InfiniteAutoQuery />} />
       </Routes>
     </div>
   );
