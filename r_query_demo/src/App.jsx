@@ -7,6 +7,7 @@ import PostsRQ from "./components/PostsRQ";
 import { Route, Routes, Link } from "react-router-dom";
 import InfiniteQuery from "./components/infiniteQuery";
 import InfiniteAutoQuery from "./components/InfiniteAutoQuery";
+import Mutations from "./components/Mutations";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
           <li>
             <Link to="/rq-posts">RQ Posts</Link>
           </li>
+          <li>
+            <Link to="/mutations">Mutations</Link>
+          </li>
         </ul>
       </nav>
       <Routes>
@@ -32,6 +36,7 @@ function App() {
         <Route path="/paginated-fruits" element={<PaginatedQueries />} />
         <Route path="/infinite-fruits" element={<InfiniteQuery />} />
         <Route path="/autoinfinite-fruits" element={<InfiniteAutoQuery />} />
+        <Route path="/mutations" element={<Mutations />} />
       </Routes>
     </div>
   );
