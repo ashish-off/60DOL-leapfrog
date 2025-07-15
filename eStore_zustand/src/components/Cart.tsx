@@ -27,7 +27,6 @@ const Cart = () => {
     }))
   );
 
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -35,8 +34,8 @@ const Cart = () => {
           <ShoppingCart />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="overflow-y-scroll space-y-2 w-96">
-        <div className="felx gap-2 text-lg items-center ">
+      <PopoverContent className="overflow-y-scroll scrollbar-hide space-y-2 w-96 bg-background p-2 border-2 rounded-2xl">
+        <div className="flex gap-2 text-lg items-center ">
           <h1>Cart:</h1>
           <Button
             onClick={reset}

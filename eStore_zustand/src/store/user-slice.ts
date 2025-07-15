@@ -10,6 +10,7 @@ type UserState = {
 
 type UserAction = {
   setAddress: (address: string) => void;
+  fetchUser : () => Promise<void>;
 };
 
 export type UserSlice = UserState & UserAction;
@@ -37,4 +38,14 @@ export const createUserSlice: StateCreator<
     set((state) => {
       state.address = address;
     }),
+    fetchUser: async () => {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users/1");
+    const data = await response.json();
+    set((state) => {
+      state.userName = data.username;
+      state.fullName = data.name;
+      state.age = data.age || 0; // Assuming age is not provided in the API
+      state.address = data.address.street + ", " + data.address.city;
+
+    })}
 });
