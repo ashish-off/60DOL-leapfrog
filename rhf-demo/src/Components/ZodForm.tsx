@@ -3,43 +3,47 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-interface FormValues {
-  name: string;
-  email: string;
-  address: string;
-}
+// interface FormValues {
+//   name: string;
+//   email: string;
+//   address: string;
+// }
 
 const ZodForm = () => {
-  
   // define Zod schema and using refine to add custom validation
-  const schema = z.object({
+  const userSchema = z.object({
     name: z.string().nonempty("Name is required"),
     email: z
       .string()
       .email("Invalid email address")
       .nonempty("Email is required")
       // custom validation for email
-      .refine((formField) => !formField.includes("admin") , {
+      .refine((formField) => !formField.includes("admin"), {
         message: "Email cannot contain 'admin'",
       }),
-    address: z.string().nonempty("Address is required").refine((formField) => formField.length >= 10 , {
-      message: "Address must be at least 10 characters long",
-    }),
+    address: z
+      .string()
+      .nonempty("Address is required")
+      .refine((formField) => formField.length >= 10, {
+        message: "Address must be at least 10 characters long",
+      }),
   });
+  type schemaType = z.infer<typeof userSchema>;
 
-  const { formState, register, control, handleSubmit } = useForm<FormValues>({
+  const { formState, register, control, handleSubmit } = useForm<schemaType>({
     defaultValues: {
       name: "",
       email: "",
       address: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(userSchema),
   });
 
   const { errors } = formState;
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: schemaType) => {
     console.log("Form submitted successfully:", data);
+
   };
 
   return (
@@ -75,3 +79,6 @@ const ZodForm = () => {
 export default ZodForm;
 
 // command: npm install yup @hookform/resolvers
+// command: npm install zod @hookform/resolvers
+// Parse and Safeparse for validating data using Zod schema
+// in rhf ,data is already validated by Zod resolver, no need to validate again
